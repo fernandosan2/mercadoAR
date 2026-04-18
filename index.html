@@ -1,0 +1,1397 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MercadoAR — El panel de acciones argentinas que faltaba</title>
+    <meta
+      name="description"
+      content="Precios en tiempo real, rendimiento vs inflación y comparativa de brokers para operar acciones argentinas. Todo en un solo lugar."
+    />
+    <meta
+      name="keywords"
+      content="acciones argentinas, acciones YPF, brokers Argentina, comparar brokers, rendimiento vs inflación"
+    />
+    <meta
+      property="og:title"
+      content="MercadoAR — El panel de acciones argentinas que faltaba"
+    />
+    <meta
+      property="og:description"
+      content="Precios en tiempo real, rendimiento vs inflación y comparativa de brokers. Todo en un solo lugar."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --black: #0a0a0a;
+        --white: #fafaf8;
+        --gray-100: #f2f1ee;
+        --gray-200: #e2e0db;
+        --gray-400: #a09e97;
+        --gray-600: #6b6961;
+        --green: #1a7a4a;
+        --green-light: #e8f5ee;
+        --red: #c0392b;
+        --red-light: #fdecea;
+        --accent: #1a7a4a;
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: "DM Sans", sans-serif;
+        background: var(--white);
+        color: var(--black);
+        font-size: 16px;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* NAV */
+      nav {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 40px;
+        background: var(--white);
+        border-bottom: 1px solid var(--gray-200);
+      }
+      .nav-logo {
+        font-family: "Instrument Serif", serif;
+        font-size: 22px;
+        color: var(--black);
+        letter-spacing: -0.5px;
+      }
+      .nav-logo span {
+        color: var(--green);
+      }
+      .nav-cta {
+        background: var(--black);
+        color: var(--white);
+        padding: 9px 20px;
+        border-radius: 6px;
+        font-size: 13px;
+        font-weight: 500;
+        text-decoration: none;
+        transition: opacity 0.15s;
+      }
+      .nav-cta:hover {
+        opacity: 0.82;
+      }
+
+      /* HERO */
+      .hero {
+        max-width: 860px;
+        margin: 0 auto;
+        padding: 100px 40px 80px;
+        text-align: center;
+      }
+      .hero-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--green-light);
+        color: var(--green);
+        padding: 5px 14px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 500;
+        letter-spacing: 0.04em;
+        margin-bottom: 28px;
+      }
+      .hero-eyebrow::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--green);
+        animation: pulse 2s infinite;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.4;
+        }
+      }
+      .hero h1 {
+        font-family: "Instrument Serif", serif;
+        font-size: clamp(40px, 7vw, 72px);
+        line-height: 1.08;
+        letter-spacing: -2px;
+        color: var(--black);
+        margin-bottom: 24px;
+      }
+      .hero h1 em {
+        font-style: italic;
+        color: var(--green);
+      }
+      .hero p {
+        font-size: 18px;
+        color: var(--gray-600);
+        font-weight: 300;
+        max-width: 560px;
+        margin: 0 auto 48px;
+        line-height: 1.65;
+      }
+
+      /* WAITLIST FORM */
+      .waitlist-form {
+        display: flex;
+        gap: 10px;
+        max-width: 480px;
+        margin: 0 auto 16px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .waitlist-form input {
+        flex: 1;
+        min-width: 220px;
+        padding: 13px 18px;
+        border-radius: 8px;
+        border: 1.5px solid var(--gray-200);
+        font-family: "DM Sans", sans-serif;
+        font-size: 15px;
+        background: var(--white);
+        color: var(--black);
+        outline: none;
+        transition: border-color 0.15s;
+      }
+      .waitlist-form input:focus {
+        border-color: var(--green);
+      }
+      .waitlist-form input::placeholder {
+        color: var(--gray-400);
+      }
+      .waitlist-form button {
+        padding: 13px 28px;
+        border-radius: 8px;
+        border: none;
+        background: var(--green);
+        color: var(--white);
+        font-family: "DM Sans", sans-serif;
+        font-size: 15px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.15s;
+        white-space: nowrap;
+      }
+      .waitlist-form button:hover {
+        background: #155e39;
+      }
+      .waitlist-form button:active {
+        transform: scale(0.98);
+      }
+      .form-note {
+        font-size: 12px;
+        color: var(--gray-400);
+        margin-bottom: 60px;
+      }
+      .success-msg {
+        display: none;
+        padding: 14px 24px;
+        border-radius: 8px;
+        background: var(--green-light);
+        color: var(--green);
+        font-size: 14px;
+        font-weight: 500;
+        max-width: 480px;
+        margin: 0 auto 16px;
+        text-align: center;
+      }
+
+      /* TICKER STRIP */
+      .ticker-strip {
+        border-top: 1px solid var(--gray-200);
+        border-bottom: 1px solid var(--gray-200);
+        overflow: hidden;
+        padding: 12px 0;
+        background: var(--gray-100);
+      }
+      .ticker-inner {
+        display: flex;
+        gap: 40px;
+        animation: scroll 28s linear infinite;
+        white-space: nowrap;
+        width: max-content;
+      }
+      @keyframes scroll {
+        from {
+          transform: translateX(0);
+        }
+        to {
+          transform: translateX(-50%);
+        }
+      }
+      .ticker-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 13px;
+        font-weight: 500;
+      }
+      .ticker-item .name {
+        color: var(--gray-600);
+      }
+      .ticker-item .price {
+        color: var(--black);
+      }
+      .ticker-item .up {
+        color: var(--green);
+      }
+      .ticker-item .dn {
+        color: var(--red);
+      }
+
+      /* PROBLEM SECTION */
+      .section {
+        padding: 80px 40px;
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+      .section-label {
+        font-size: 11px;
+        font-weight: 500;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--gray-400);
+        margin-bottom: 16px;
+      }
+      .section h2 {
+        font-family: "Instrument Serif", serif;
+        font-size: clamp(28px, 4vw, 44px);
+        letter-spacing: -1px;
+        line-height: 1.15;
+        margin-bottom: 20px;
+      }
+      .section h2 em {
+        font-style: italic;
+        color: var(--green);
+      }
+      .section > p {
+        font-size: 17px;
+        color: var(--gray-600);
+        max-width: 600px;
+        line-height: 1.7;
+      }
+
+      .pain-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 1px;
+        background: var(--gray-200);
+        border: 1px solid var(--gray-200);
+        border-radius: 12px;
+        overflow: hidden;
+        margin-top: 48px;
+      }
+      .pain-card {
+        background: var(--white);
+        padding: 28px 28px 32px;
+      }
+      .pain-icon {
+        font-size: 24px;
+        margin-bottom: 16px;
+      }
+      .pain-card h3 {
+        font-size: 16px;
+        font-weight: 500;
+        margin-bottom: 8px;
+      }
+      .pain-card p {
+        font-size: 14px;
+        color: var(--gray-600);
+        line-height: 1.6;
+      }
+
+      /* FEATURES */
+      .features {
+        padding: 80px 40px;
+        background: var(--black);
+      }
+      .features-inner {
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+      .features .section-label {
+        color: var(--gray-400);
+      }
+      .features h2 {
+        font-family: "Instrument Serif", serif;
+        font-size: clamp(28px, 4vw, 44px);
+        letter-spacing: -1px;
+        color: var(--white);
+        margin-bottom: 56px;
+      }
+      .features h2 em {
+        font-style: italic;
+        color: #5dcaa5;
+      }
+      .feat-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 32px;
+      }
+      .feat-card {
+        border-top: 1px solid #2a2a2a;
+        padding-top: 28px;
+      }
+      .feat-num {
+        font-size: 11px;
+        font-weight: 500;
+        color: var(--gray-600);
+        letter-spacing: 0.08em;
+        margin-bottom: 16px;
+      }
+      .feat-card h3 {
+        font-size: 18px;
+        font-weight: 500;
+        color: var(--white);
+        margin-bottom: 10px;
+      }
+      .feat-card p {
+        font-size: 14px;
+        color: var(--gray-400);
+        line-height: 1.65;
+      }
+      .feat-highlight {
+        color: #5dcaa5;
+        font-weight: 500;
+      }
+
+      /* PREVIEW */
+      .preview-section {
+        padding: 80px 40px;
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+      .preview-section h2 {
+        font-family: "Instrument Serif", serif;
+        font-size: clamp(28px, 4vw, 44px);
+        letter-spacing: -1px;
+        margin-bottom: 40px;
+      }
+      .preview-section h2 em {
+        font-style: italic;
+        color: var(--green);
+      }
+      .mock-table {
+        border: 1px solid var(--gray-200);
+        border-radius: 12px;
+        overflow: hidden;
+      }
+      .mock-thead {
+        display: grid;
+        grid-template-columns: 40px 1fr 120px 90px 120px 100px;
+        gap: 0;
+        padding: 10px 20px;
+        background: var(--gray-100);
+        border-bottom: 1px solid var(--gray-200);
+      }
+      .mock-thead span {
+        font-size: 11px;
+        font-weight: 500;
+        color: var(--gray-400);
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+      .mock-row {
+        display: grid;
+        grid-template-columns: 40px 1fr 120px 90px 120px 100px;
+        gap: 0;
+        padding: 14px 20px;
+        border-bottom: 1px solid var(--gray-200);
+        align-items: center;
+        transition: background 0.12s;
+        cursor: pointer;
+      }
+      .mock-row:last-child {
+        border-bottom: none;
+      }
+      .mock-row:hover {
+        background: var(--gray-100);
+      }
+      .mock-rank {
+        font-size: 13px;
+        color: var(--gray-400);
+        font-weight: 500;
+      }
+      .mock-ticker-wrap {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .mock-avatar {
+        width: 30px;
+        height: 30px;
+        border-radius: 7px;
+        background: var(--green-light);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        font-weight: 500;
+        color: var(--green);
+        flex-shrink: 0;
+      }
+      .mock-company {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--black);
+      }
+      .mock-sector {
+        font-size: 11px;
+        color: var(--gray-400);
+      }
+      .mock-price {
+        font-size: 13px;
+        font-weight: 500;
+      }
+      .mock-var-up {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--green);
+      }
+      .mock-var-dn {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--red);
+      }
+      .mock-context {
+        font-size: 12px;
+      }
+      .mock-context.up {
+        color: var(--green);
+      }
+      .mock-context.dn {
+        color: var(--red);
+      }
+      .mock-brokers {
+        font-size: 11px;
+        padding: 3px 8px;
+        border-radius: 10px;
+        background: var(--gray-100);
+        color: var(--gray-600);
+        font-weight: 500;
+        display: inline-block;
+      }
+
+      /* SOCIAL PROOF */
+      .social {
+        padding: 60px 40px;
+        border-top: 1px solid var(--gray-200);
+        border-bottom: 1px solid var(--gray-200);
+        background: var(--gray-100);
+      }
+      .social-inner {
+        max-width: 700px;
+        margin: 0 auto;
+        text-align: center;
+      }
+      .social h2 {
+        font-family: "Instrument Serif", serif;
+        font-size: 32px;
+        letter-spacing: -1px;
+        margin-bottom: 12px;
+      }
+      .social p {
+        font-size: 15px;
+        color: var(--gray-600);
+      }
+      .counter-row {
+        display: flex;
+        justify-content: center;
+        gap: 60px;
+        margin-top: 40px;
+        flex-wrap: wrap;
+      }
+      .counter-item {
+        text-align: center;
+      }
+      .counter-num {
+        font-family: "Instrument Serif", serif;
+        font-size: 42px;
+        color: var(--black);
+        letter-spacing: -2px;
+      }
+      .counter-lbl {
+        font-size: 13px;
+        color: var(--gray-600);
+        margin-top: 4px;
+      }
+
+      /* BOTTOM CTA */
+      .bottom-cta {
+        padding: 100px 40px;
+        text-align: center;
+        max-width: 700px;
+        margin: 0 auto;
+      }
+      .bottom-cta h2 {
+        font-family: "Instrument Serif", serif;
+        font-size: clamp(32px, 5vw, 56px);
+        letter-spacing: -2px;
+        line-height: 1.1;
+        margin-bottom: 20px;
+      }
+      .bottom-cta h2 em {
+        font-style: italic;
+        color: var(--green);
+      }
+      .bottom-cta p {
+        font-size: 17px;
+        color: var(--gray-600);
+        margin-bottom: 40px;
+      }
+      .bottom-cta .waitlist-form {
+        max-width: 440px;
+      }
+
+      /* FOOTER */
+      footer {
+        border-top: 1px solid var(--gray-200);
+        padding: 28px 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+      .footer-logo {
+        font-family: "Instrument Serif", serif;
+        font-size: 18px;
+      }
+      .footer-logo span {
+        color: var(--green);
+      }
+      footer p {
+        font-size: 12px;
+        color: var(--gray-400);
+      }
+
+      @media (max-width: 640px) {
+        nav {
+          padding: 14px 20px;
+        }
+        .hero {
+          padding: 60px 20px 60px;
+        }
+        .section {
+          padding: 60px 20px;
+        }
+        .features {
+          padding: 60px 20px;
+        }
+        .preview-section {
+          padding: 60px 20px;
+        }
+        .social {
+          padding: 48px 20px;
+        }
+        .bottom-cta {
+          padding: 60px 20px;
+        }
+        footer {
+          padding: 24px 20px;
+        }
+        .mock-thead,
+        .mock-row {
+          grid-template-columns: 36px 1fr 90px 80px;
+        }
+        .mock-thead span:nth-child(5),
+        .mock-thead span:nth-child(6),
+        .mock-row > *:nth-child(5),
+        .mock-row > *:nth-child(6) {
+          display: none;
+        }
+        .counter-row {
+          gap: 32px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <div class="nav-logo">Mercado<span>AR</span></div>
+      <a href="#waitlist" class="nav-cta">Quiero acceso anticipado</a>
+    </nav>
+
+    <section class="hero">
+      <div class="hero-eyebrow">
+        En construcción — acceso anticipado disponible
+      </div>
+      <h1>El panel de acciones argentinas que <em>faltaba</em></h1>
+      <p>
+        Precios en tiempo real, rendimiento real vs inflación, comparativa de
+        comisiones y tu cartera general con todos los brokers en un solo lugar.
+      </p>
+      <div class="waitlist-form" id="waitlist">
+        <input type="email" id="email-input" placeholder="tu@email.com" />
+        <button onclick="submitWaitlist()">Anotarme →</button>
+      </div>
+      <div class="success-msg" id="success-msg">
+        ¡Listo! Te avisamos cuando abramos el acceso. Gracias por sumarte.
+      </div>
+      <p class="form-note">
+        Ya se anotaron 47 personas. Sin spam, solo novedades del producto.
+      </p>
+    </section>
+
+    <div class="ticker-strip">
+      <div class="ticker-inner" id="ticker-inner"></div>
+      <div class="ticker-inner-asds" style="display: none">
+        <div class="ticker-item">
+          <span class="name">YPFD</span><span class="price">$24.850</span
+          ><span class="up">+3,42%</span>
+        </div>
+        <div class="ticker-item">
+          <span class="name">GGAL</span><span class="price">$1.124</span
+          ><span class="up">+1,80%</span>
+        </div>
+        <div class="ticker-item">
+          <span class="name">BMA</span><span class="price">$890</span
+          ><span class="dn">−0,60%</span>
+        </div>
+        <div class="ticker-item">
+          <span class="name">PAMP</span><span class="price">$3.240</span
+          ><span class="up">+5,10%</span>
+        </div>
+        <div class="ticker-item">
+          <span class="name">ALUA</span><span class="price">$1.087</span
+          ><span class="up">+2,30%</span>
+        </div>
+        <div class="ticker-item">
+          <span class="name">TXAR</span><span class="price">$642</span
+          ><span class="dn">−1,20%</span>
+        </div>
+        <div class="ticker-item">
+          <span class="name">TECO2</span><span class="price">$1.890</span
+          ><span class="up">+0,90%</span>
+        </div>
+        <div class="ticker-item">
+          <span class="name">CRES</span><span class="price">$2.340</span
+          ><span class="up">+4,50%</span>
+        </div>
+        <div class="ticker-item">
+          <span class="name">MIRG</span><span class="price">$3.120</span
+          ><span class="dn">−0,30%</span>
+        </div>
+        <div class="ticker-item">
+          <span class="name">SUPV</span><span class="price">$745</span
+          ><span class="up">+2,10%</span>
+        </div>
+        <div class="ticker-item">
+          <span class="name">YPFD</span><span class="price">$24.850</span
+          ><span class="up">+3,42%</span>
+        </div>
+        <div class="ticker-item">
+          <span class="name">GGAL</span><span class="price">$1.124</span
+          ><span class="up">+1,80%</span>
+        </div>
+        <div class="ticker-item">
+          <span class="name">BMA</span><span class="price">$890</span
+          ><span class="dn">−0,60%</span>
+        </div>
+        <div class="ticker-item">
+          <span class="name">PAMP</span><span class="price">$3.240</span
+          ><span class="up">+5,10%</span>
+        </div>
+        <div class="ticker-item">
+          <span class="name">ALUA</span><span class="price">$1.087</span
+          ><span class="up">+2,30%</span>
+        </div>
+        <div class="ticker-item">
+          <span class="name">TXAR</span><span class="price">$642</span
+          ><span class="dn">−1,20%</span>
+        </div>
+        <div class="ticker-item">
+          <span class="name">TECO2</span><span class="price">$1.890</span
+          ><span class="up">+0,90%</span>
+        </div>
+        <div class="ticker-item">
+          <span class="name">CRES</span><span class="price">$2.340</span
+          ><span class="up">+4,50%</span>
+        </div>
+        <div class="ticker-item">
+          <span class="name">MIRG</span><span class="price">$3.120</span
+          ><span class="dn">−0,30%</span>
+        </div>
+        <div class="ticker-item">
+          <span class="name">SUPV</span><span class="price">$745</span
+          ><span class="up">+2,10%</span>
+        </div>
+      </div>
+    </div>
+
+    <section class="section">
+      <div class="section-label">El problema</div>
+      <h2>Invertir en Argentina es difícil. <em>Comparar</em> es imposible.</h2>
+      <p>
+        Los datos existen pero están dispersos, desactualizados o pensados para
+        traders institucionales, no para vos.
+      </p>
+      <div class="pain-grid">
+        <div class="pain-card">
+          <div class="pain-icon">🔀</div>
+          <h3>Los brokers no se comparan solos</h3>
+          <p>
+            Cocos, Balanz, IOL y PPI cobran comisiones distintas según el
+            instrumento. Nadie te muestra cuánto te cuesta realmente la misma
+            operación en cada uno.
+          </p>
+        </div>
+        <div class="pain-card">
+          <div class="pain-icon">📉</div>
+          <h3>¿Le ganaste a la inflación o no?</h3>
+          <p>
+            Las apps muestran rentabilidad en pesos pero no te dicen si ganaste
+            o perdiste en términos reales. En Argentina eso es la diferencia
+            entre ahorrar e ilusionarte.
+          </p>
+        </div>
+        <div class="pain-card">
+          <div class="pain-icon">🗺</div>
+          <h3>La información está fragmentada</h3>
+          <p>
+            Datos en BYMA, noticias en Ámbito, comisiones en cada broker por
+            separado, tipo de cambio en otro sitio. Nunca todo en el mismo
+            lugar.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="features">
+      <div class="features-inner">
+        <div class="section-label">La solución</div>
+        <h2>Todo lo que necesitás para invertir mejor, <em>junto</em>.</h2>
+        <div class="feat-grid">
+          <div class="feat-card">
+            <div class="feat-num">01</div>
+            <h3>Precios en tiempo real</h3>
+            <p>
+              Todas las acciones del mercado argentino con variación diaria,
+              semanal y mensual. En pesos y en
+              <span class="feat-highlight">dólares MEP</span> simultáneamente.
+            </p>
+          </div>
+          <div class="feat-card">
+            <div class="feat-num">02</div>
+            <h3>Rendimiento vs inflación</h3>
+            <p>
+              Por primera vez, cada acción muestra si
+              <span class="feat-highlight"
+                >le ganaste o perdiste a la inflación</span
+              >
+              en términos reales. Comparado también con plazo fijo y dólar blue.
+            </p>
+          </div>
+          <div class="feat-card">
+            <div class="feat-num">03</div>
+            <h3>Comparador de brokers</h3>
+            <p>
+              Para cada acción, mostramos en qué brokers podés operarla y
+              <span class="feat-highlight">cuánto te cuesta exactamente</span>
+              según el monto que querés invertir.
+            </p>
+          </div>
+          <div class="feat-card">
+            <div class="feat-num">04</div>
+            <h3>Datos fundamentales</h3>
+            <p>
+              P/E, P/VL, EPS, dividendos y market cap en un formato limpio. Sin
+              ruido, sin tener que buscar en balances en PDF.
+            </p>
+          </div>
+          <div class="feat-card">
+            <div class="feat-num">05</div>
+            <h3>Centro de control de inversiones unificado</h3>
+            <p>
+              Conectá tus brokers para visualizar la totalidad de tus inversiones en un solo tablero. Analizá el rendimiento real y la composición de tu patrimonio de forma integral y en tiempo real.
+            </p>
+          </div>
+          <div class="feat-card">
+            <div class="feat-num">06</div>
+            <h3>Simuladores de estrategia</h3>
+            <p>
+              Evaluá el potencial de tus inversiones antes de operar. Utilizá nuestras calculadoras para proyectar rendimientos y comparar estrategias de acumulación.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="preview-section">
+      <div class="section-label">Preview</div>
+      <h2>Así se ve el <em>panel</em></h2>
+      <div class="mock-table">
+        <div class="mock-thead">
+          <span>#</span><span>Acción</span><span>Precio ARS</span
+          ><span>Hoy</span><span>Real vs inflación</span><span>Brokers</span>
+        </div>
+        <div class="mock-row">
+          <span class="mock-rank">1</span>
+          <div class="mock-ticker-wrap">
+            <div class="mock-avatar">YPF</div>
+            <div>
+              <div class="mock-company">YPF S.A.</div>
+              <div class="mock-sector">Energía</div>
+            </div>
+          </div>
+          <span class="mock-price">$24.850</span>
+          <span class="mock-var-up">+3,42%</span>
+          <span class="mock-context up">+18,4% real</span>
+          <span class="mock-brokers">5 brokers</span>
+        </div>
+        <div class="mock-row">
+          <span class="mock-rank">2</span>
+          <div class="mock-ticker-wrap">
+            <div
+              class="mock-avatar"
+              style="background: #e6f1fb; color: #0c447c"
+            >
+              PAM
+            </div>
+            <div>
+              <div class="mock-company">Pampa Energía</div>
+              <div class="mock-sector">Energía</div>
+            </div>
+          </div>
+          <span class="mock-price">$3.240</span>
+          <span class="mock-var-up">+5,10%</span>
+          <span class="mock-context up">+31,2% real</span>
+          <span class="mock-brokers">5 brokers</span>
+        </div>
+        <div class="mock-row">
+          <span class="mock-rank">3</span>
+          <div class="mock-ticker-wrap">
+            <div
+              class="mock-avatar"
+              style="background: #faeeda; color: #633806"
+            >
+              GGA
+            </div>
+            <div>
+              <div class="mock-company">Grupo Galicia</div>
+              <div class="mock-sector">Bancos</div>
+            </div>
+          </div>
+          <span class="mock-price">$1.124</span>
+          <span class="mock-var-up">+1,80%</span>
+          <span class="mock-context up">+9,7% real</span>
+          <span class="mock-brokers">5 brokers</span>
+        </div>
+        <div class="mock-row">
+          <span class="mock-rank">4</span>
+          <div class="mock-ticker-wrap">
+            <div
+              class="mock-avatar"
+              style="background: #fcebeb; color: #791f1f"
+            >
+              BMA
+            </div>
+            <div>
+              <div class="mock-company">Banco Macro</div>
+              <div class="mock-sector">Bancos</div>
+            </div>
+          </div>
+          <span class="mock-price">$890</span>
+          <span class="mock-var-dn">−0,60%</span>
+          <span class="mock-context dn">−3,1% real</span>
+          <span class="mock-brokers">4 brokers</span>
+        </div>
+        <div class="mock-row">
+          <span class="mock-rank">5</span>
+          <div class="mock-ticker-wrap">
+            <div
+              class="mock-avatar"
+              style="background: #eaf3de; color: #27500a"
+            >
+              ALU
+            </div>
+            <div>
+              <div class="mock-company">Aluar</div>
+              <div class="mock-sector">Industria</div>
+            </div>
+          </div>
+          <span class="mock-price">$1.087</span>
+          <span class="mock-var-up">+2,30%</span>
+          <span class="mock-context up">+12,8% real</span>
+          <span class="mock-brokers">5 brokers</span>
+        </div>
+      </div>
+      <br>
+      <br>
+      <h2>Mi Cartera</h2>
+<div class="max-w-6xl mx-auto mb-8">
+    <div class="mb-4 grid grid-cols-2 gap-4 lg:grid-cols-4">
+        
+        <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
+            <div class="flex items-start justify-between">
+                <div>
+                    <p class="text-xs font-medium text-gray-500 uppercase">Capital total ARS</p>
+                    <p class="mt-1 text-2xl font-bold text-gray-900">$6.573.000</p>
+                    <p class="mt-0.5 text-xs text-gray-500 text-muted-foreground">Valuación actual</p>
+                </div>
+                <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100 text-gray-500">
+                    <i data-lucide="wallet" class="h-4 w-4"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
+            <div class="flex items-start justify-between">
+                <div>
+                    <p class="text-xs font-medium text-gray-500 uppercase">En USD MEP</p>
+                    <p class="mt-1 text-2xl font-bold text-gray-900">U$S 6.450</p>
+                    <p class="mt-0.5 text-xs text-gray-500">al MEP $1.019</p>
+                </div>
+                <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100 text-gray-500">
+                    <i data-lucide="dollar-sign" class="h-4 w-4"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
+            <div class="flex items-start justify-between">
+                <div>
+                    <p class="text-xs font-medium text-gray-500 uppercase">Ganancia total</p>
+                    <p class="mt-1 text-2xl font-bold text-emerald-600">+$1.205.000</p>
+                    <p class="text-sm font-medium text-emerald-600">+22,5%</p>
+                </div>
+                <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
+                    <i data-lucide="trending-up" class="h-4 w-4"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
+            <div class="flex items-start justify-between">
+                <div>
+                    <p class="text-xs font-medium text-gray-500 uppercase">Ganancia real</p>
+                    <p class="mt-1 text-2xl font-bold text-emerald-600">+8,1%</p>
+                    <p class="mt-0.5 text-xs text-gray-500">vs inflación</p>
+                </div>
+                <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
+                    <i data-lucide="trending-up" class="h-4 w-4"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
+        <div id="distribution-container" class="relative">
+            <div id="progress-bar" class="mb-3 flex h-4 overflow-hidden rounded-full bg-gray-100">
+                </div>
+
+            <div id="legend" class="flex flex-wrap gap-x-4 gap-y-1">
+                </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<div class="max-w-7xl mx-auto p-4 lg:p-8">
+    <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+        <div class="p-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-gray-100">
+            <div class="flex items-center gap-3">
+                <h2 class="text-lg font-bold text-gray-900">Posiciones abiertas</h2>
+                <span id="pos-count" class="bg-gray-100 text-gray-700 px-2.5 py-0.5 rounded-full text-xs font-medium">0 posiciones</span>
+            </div>
+            <button class="flex items-center justify-center bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                <i data-lucide="plus" class="mr-1.5 h-4 w-4"></i>
+                Agregar posición
+            </button>
+        </div>
+
+        <div class="p-6">
+            <div class="flex flex-wrap gap-2 mb-6 bg-gray-50 p-1 rounded-lg w-fit" id="filter-tabs">
+                <button data-filter="todas" class="tab-btn active px-4 py-1.5 text-sm font-medium rounded-md transition-all">Todas</button>
+                <button data-filter="Acción" class="tab-btn px-4 py-1.5 text-sm font-medium rounded-md transition-all">Acciones</button>
+                <button data-filter="Bono" class="tab-btn px-4 py-1.5 text-sm font-medium rounded-md transition-all">Bonos</button>
+                <button data-filter="Letra" class="tab-btn px-4 py-1.5 text-sm font-medium rounded-md transition-all">Letras</button>
+                <button data-filter="CEDEAR" class="tab-btn px-4 py-1.5 text-sm font-medium rounded-md transition-all">CEDEARs</button>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full min-w-[1000px] text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-gray-100">
+                            <th class="py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Instrumento</th>
+                            <th class="py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Broker</th>
+                            <th class="py-3 px-4 text-right text-xs font-semibold text-gray-500 uppercase">Cantidad</th>
+                            <th class="py-3 px-4 text-right text-xs font-semibold text-gray-500 uppercase">Precio Actual</th>
+                            <th class="py-3 px-4 text-right text-xs font-semibold text-gray-500 uppercase">Valuación ARS</th>
+                            <th class="py-3 px-4 text-right text-xs font-semibold text-gray-500 uppercase">P&L %</th>
+                            <th class="py-3 px-4 text-center text-xs font-semibold text-gray-500 uppercase">Real vs Infl.</th>
+                            <th class="py-3 px-4"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+                        </tbody>
+                    <tfoot id="table-footer">
+                        </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .tab-btn.active { @apply bg-white shadow-sm text-emerald-700; }
+    .tab-btn:not(.active) { @apply text-gray-500 hover:text-gray-700; }
+</style>
+
+<script src="./js/Mock-de-datos.js">
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="max-w-7xl mx-auto mb-8 grid gap-4 lg:grid-cols-2 p-4 lg:p-8">
+    
+    <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-6">
+        <h3 class="text-lg font-bold text-gray-900 mb-4">Distribución de cartera</h3>
+        <div class="flex flex-col items-center">
+            <div class="relative h-64 w-full flex justify-center">
+                <canvas id="pieChart"></canvas>
+                <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                    <p class="text-xs text-gray-500">Total</p>
+                    <p class="text-lg font-bold text-gray-900" id="total-val-display">$6.6M</p>
+                </div>
+            </div>
+            <div id="pie-legend" class="mt-4 flex flex-wrap justify-center gap-x-4 gap-y-2">
+                </div>
+        </div>
+    </div>
+
+    <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-6">
+        <h3 class="text-lg font-bold text-gray-900 mb-4">Evolución del capital</h3>
+        <div class="h-64 w-full">
+            <canvas id="areaChart"></canvas>
+        </div>
+        <div class="mt-4 flex justify-center gap-4 text-[10px] text-gray-500">
+            <div class="flex items-center gap-1.5">
+                <div class="h-0.5 w-4 bg-red-500 border-dashed border-t-2"></div>
+                <span>Inflación acumulada</span>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // --- DATOS ---
+    const distributionData = [
+        { name: 'Acciones', value: 72, amount: 4732560, color: '#10b981' },
+        { name: 'Bonos', value: 10, amount: 657300, color: '#3b82f6' },
+        { name: 'Letras', value: 7, amount: 460110, color: '#f59e0b' },
+        { name: 'ETFs', value: 5, amount: 328650, color: '#8b5cf6' },
+        { name: 'Efectivo', value: 6, amount: 394380, color: '#9ca3af' },
+    ];
+
+    const portfolioEvolution = [
+        { month: 'Ene', value: 4200000, inflation: 4200000 },
+        { month: 'Feb', value: 4500000, inflation: 4350000 },
+        { month: 'Mar', value: 4800000, inflation: 4600000 },
+        { month: 'Abr', value: 5200000, inflation: 4900000 },
+        { month: 'May', value: 5800000, inflation: 5300000 },
+        { month: 'Jun', value: 6573000, inflation: 5800000 },
+    ];
+
+    // Helper para formato ARS
+    const formatARS = (v) => v >= 1000000 ? `$${(v / 1000000).toFixed(1)}M` : `$${v.toLocaleString('es-AR')}`;
+
+    // --- GRÁFICO DE DONA (PIE) ---
+    const ctxPie = document.getElementById('pieChart').getContext('2d');
+    new Chart(ctxPie, {
+        type: 'doughnut',
+        data: {
+            labels: distributionData.map(d => d.name),
+            datasets: [{
+                data: distributionData.map(d => d.value),
+                backgroundColor: distributionData.map(d => d.color),
+                borderWidth: 2,
+                hoverOffset: 4,
+                cutout: '70%'
+            }]
+        },
+        options: {
+            plugins: { legend: { display: false } },
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+
+    // Generar leyenda del Pie
+    const pieLegend = document.getElementById('pie-legend');
+    distributionData.forEach(item => {
+        pieLegend.innerHTML += `
+            <div class="flex items-center gap-1.5">
+                <div class="h-2.5 w-2.5 rounded-full" style="background-color: ${item.color}"></div>
+                <span class="text-xs text-gray-500">${item.name} ${item.value}%</span>
+            </div>
+        `;
+    });
+
+    // --- GRÁFICO DE ÁREA (EVOLUCIÓN) ---
+    const ctxArea = document.getElementById('areaChart').getContext('2d');
+    
+    // Crear Gradiente para el área
+    const gradient = ctxArea.createLinearGradient(0, 0, 0, 300);
+    gradient.addColorStop(0, 'rgba(16, 185, 129, 0.3)');
+    gradient.addColorStop(1, 'rgba(16, 185, 129, 0)');
+
+    new Chart(ctxArea, {
+        type: 'line',
+        data: {
+            labels: portfolioEvolution.map(d => d.month),
+            datasets: [
+                {
+                    label: 'Capital',
+                    data: portfolioEvolution.map(d => d.value),
+                    borderColor: '#10b981',
+                    backgroundColor: gradient,
+                    fill: true,
+                    tension: 0.4,
+                    borderWidth: 2,
+                    pointRadius: 3
+                },
+                {
+                    label: 'Inflación',
+                    data: portfolioEvolution.map(d => d.inflation),
+                    borderColor: '#ef4444',
+                    borderDash: [5, 5],
+                    fill: false,
+                    tension: 0.4,
+                    borderWidth: 2,
+                    pointRadius: 0
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 10 } } }
+            },
+            scales: {
+                y: {
+                    ticks: { callback: (val) => formatARS(val), font: { size: 10 } },
+                    grid: { color: '#f3f4f6' }
+                },
+                x: {
+                    grid: { display: false },
+                    ticks: { font: { size: 10 } }
+                }
+            }
+        }
+    });
+</script>
+</section>
+
+<script>
+    // Datos originales del componente
+    const distribution = [
+        { label: 'Acciones', percent: 72, color: 'bg-emerald-500', amount: 4732560 },
+        { label: 'Bonos', percent: 10, color: 'bg-blue-500', amount: 657300 },
+        { label: 'Letras', percent: 7, color: 'bg-amber-500', amount: 460110 },
+        { label: 'Cauciones', percent: 5, color: 'bg-purple-500', amount: 328650 },
+        { label: 'Efectivo', percent: 6, color: 'bg-gray-400', amount: 394380 },
+    ];
+
+    const progressBar = document.getElementById('progress-bar');
+    const legend = document.getElementById('legend');
+
+    // Generar la barra y la leyenda dinámicamente
+    distribution.forEach(segment => {
+        // Crear segmento de barra
+        const div = document.createElement('div');
+        div.className = `cursor-pointer transition-opacity duration-200 ${segment.color} relative group has-tooltip`;
+        div.style.width = `${segment.percent}%`;
+        
+        // Tooltip simple
+        div.innerHTML = `
+            <div class="tooltip bg-black text-white text-[10px] p-2 rounded absolute -top-12 left-1/2 -translate-x-1/2 w-32 pointer-events-none">
+                <strong>${segment.label}</strong><br>
+                $${segment.amount.toLocaleString('es-AR')} (${segment.percent}%)
+            </div>
+        `;
+
+        // Efecto Hover (reemplaza el useState de React)
+        div.addEventListener('mouseenter', () => highlight(segment.label));
+        div.addEventListener('mouseleave', resetHighlight);
+        
+        progressBar.appendChild(div);
+
+        // Crear item de leyenda
+        const legendItem = document.createElement('div');
+        legendItem.className = "flex items-center gap-1.5 cursor-pointer transition-opacity duration-200";
+        legendItem.setAttribute('data-label', segment.label);
+        legendItem.innerHTML = `
+            <div class="h-2.5 w-2.5 rounded-full ${segment.color}"></div>
+            <span class="text-xs text-gray-500">${segment.label} ${segment.percent}%</span>
+        `;
+        
+        legendItem.addEventListener('mouseenter', () => highlight(segment.label));
+        legendItem.addEventListener('mouseleave', resetHighlight);
+        
+        legend.appendChild(legendItem);
+    });
+
+    function highlight(label) {
+        // Opacar otros segmentos de la barra
+        Array.from(progressBar.children).forEach(child => {
+            if (!child.innerHTML.includes(label)) child.classList.add('opacity-50');
+        });
+        // Opacar otros items de la leyenda
+        Array.from(legend.children).forEach(child => {
+            if (child.getAttribute('data-label') !== label) child.classList.add('opacity-50');
+        });
+    }
+
+    function resetHighlight() {
+        Array.from(progressBar.children).forEach(child => child.classList.remove('opacity-50'));
+        Array.from(legend.children).forEach(child => child.classList.remove('opacity-50'));
+    }
+
+    // Inicializar íconos de Lucide
+    lucide.createIcons();
+</script>
+<hr>
+    <section class="social">
+      <div class="social-inner">
+        <h2>El mercado de capitales argentino está creciendo</h2>
+        <p>
+          Cada vez más argentinos buscan alternativas de inversión. Pero la
+          información sigue fragmentada y difícil de entender.
+        </p>
+        <div class="counter-row">
+          <div class="counter-item">
+            <div class="counter-num">+10k</div>
+            <div class="counter-lbl">
+              búsquedas mensuales<br />"Acciones Argentinas"
+            </div>
+          </div>
+          <div class="counter-item">
+            <div class="counter-num">5</div>
+            <div class="counter-lbl">
+              brokers principales<br />sin comparativa pública
+            </div>
+          </div>
+          <div class="counter-item">
+            <div class="counter-num">0</div>
+            <div class="counter-lbl">
+              plataformas que muestran<br />rendimiento real vs inflación
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bottom-cta" id="cta-bottom">
+      <h2>Sé el primero en <em>acceder</em></h2>
+      <p>
+        Dejá tu email y te avisamos cuando abramos. Los primeros 500 usuarios
+        tienen acceso gratuito de por vida a las funciones premium.
+      </p>
+      <div class="waitlist-form">
+        <input type="email" id="email-input-2" placeholder="tu@email.com" />
+        <button onclick="submitWaitlist2()">Anotarme →</button>
+      </div>
+      <div class="success-msg" id="success-msg-2">
+        ¡Perfecto! Ya estás en la lista. Te contactamos pronto.
+      </div>
+      <p class="form-note">Sin spam. Podés darte de baja cuando quieras.</p>
+    </section>
+
+    <footer>
+      <div class="footer-logo">Mercado<span>AR</span></div>
+      <p>
+        © 2026 MercadoAR · Datos con fines informativos, no constituyen
+        asesoramiento financiero.
+      </p>
+    </footer>
+
+    <script>
+      function submitWaitlist() {
+        const email = document.getElementById("email-input").value;
+        if (!email || !email.includes("@")) {
+          document.getElementById("email-input").style.borderColor = "#c0392b";
+          return;
+        }
+        document.querySelector(".waitlist-form").style.display = "none";
+        document.getElementById("success-msg").style.display = "block";
+        document.querySelector(".form-note").style.display = "none";
+      }
+      function submitWaitlist2() {
+        const email = document.getElementById("email-input-2").value;
+        if (!email || !email.includes("@")) {
+          document.getElementById("email-input-2").style.borderColor =
+            "#c0392b";
+          return;
+        }
+        document.querySelectorAll(
+          ".bottom-cta .waitlist-form",
+        )[0].style.display = "none";
+        document.getElementById("success-msg-2").style.display = "block";
+      }
+      const API_URL = "https://data912.com/live/arg_stocks";
+      async function getStocks() {
+        try {
+          const response = await fetch(API_URL);
+          const data = await response.json();
+          console.log(data);
+
+          const container = document.getElementById("ticker-inner");
+          container.innerHTML = ""; // Limpiamos antes de cargar
+          const showTickets = ["YPFD", "GGAL", "PAMP", "LOMA", "TECO2", "BMA"];
+
+          for (var i = 0; i < 5; i++) {
+            data.forEach((stock) => {
+              const isPositive = stock.pct_change >= 0;
+              const color = isPositive ? "up" : "dn";
+              const sign = isPositive ? "+" : "";
+
+              if (showTickets.includes(stock.symbol)) {
+                const stockElement = document.createElement("div");
+                stockElement.classList.add("ticker-item");
+
+                stockElement.innerHTML = `
+                    <span class="name">${stock.symbol}</span>
+                    <span class="price">$${stock.c.toLocaleString("es-AR")}</span>
+                    <span class="${color}">${sign}${stock.pct_change.toFixed(2)}%</span>
+                    `;
+                container.appendChild(stockElement);
+              }
+            });
+          }
+        } catch (error) {
+          console.error("Error al obtener datos:", error);
+        }
+      }
+
+      getStocks();
+      // Refrescar cada 1 minuto
+      setInterval(getStocks, 60000);
+    </script>
+  </body>
+</html>
