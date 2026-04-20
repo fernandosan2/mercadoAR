@@ -642,18 +642,31 @@
       <p>
         Precios en tiempo real, rendimiento real vs inflación, comparativa de
         comisiones y tu cartera general con todos los brokers en un solo lugar.
-      </p>
-      <div class="waitlist-form" id="waitlist">
-        <form action="https://formspree.io/f/tu_id_aca" method="POST"></form>
-        <input type="email" id="email-input" placeholder="mercadoar.mercado@gmail.com" />
-        <button onclick="submitWaitlist()">Anotarme →</button>
-      </div>
-      <div class="success-msg" id="success-msg">
-        ¡Listo! Te avisamos cuando abramos el acceso. Gracias por sumarte.
-      </div>
-      <p class="form-note">
-        Ya se anotaron 47 personas. Sin spam, solo novedades del producto.
-      </p>
+      <form 
+  id="landing-form" 
+  action="https://formspree.io/f/xrerqrve" 
+  method="POST" 
+  class="flex flex-col sm:flex-row gap-3"
+>
+  <input 
+    type="email" 
+    name="email" 
+    required 
+    placeholder="tu@email.com" 
+    class="flex-1 px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+  >
+  <button 
+    type="submit" 
+    id="form-button"
+    class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-lg font-bold transition-all"
+  >
+    Obtener acceso
+  </button>
+</form>
+
+<div id="form-status" class="hidden mt-4 p-3 rounded-lg bg-emerald-50 text-emerald-700 text-sm font-medium text-center">
+  ¡Gracias! Ya estás en la lista de acceso anticipado.
+</div>
     </section>
 
     <div class="ticker-strip">
@@ -1319,13 +1332,31 @@
         Dejá tu email y te avisamos cuando abramos. Los primeros 500 usuarios
         tienen acceso gratuito de por vida a las funciones premium.
       </p>
-      <div class="waitlist-form">
-        <input type="email" id="email-input-2" placeholder="tu@email.com" />
-        <button onclick="submitWaitlist2()">Anotarme →</button>
-      </div>
-      <div class="success-msg" id="success-msg-2">
-        ¡Perfecto! Ya estás en la lista. Te contactamos pronto.
-      </div>
+      <form 
+  id="landing-form" 
+  action="https://formspree.io/f/xrerqrve" 
+  method="POST" 
+  class="flex flex-col sm:flex-row gap-3"
+>
+  <input 
+    type="email" 
+    name="email" 
+    required 
+    placeholder="tu@email.com" 
+    class="flex-1 px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+  >
+  <button 
+    type="submit" 
+    id="form-button"
+    class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-lg font-bold transition-all"
+  >
+    Obtener acceso
+  </button>
+</form>
+
+<div id="form-status" class="hidden mt-4 p-3 rounded-lg bg-emerald-50 text-emerald-700 text-sm font-medium text-center">
+  ¡Gracias! Ya estás en la lista de acceso anticipado.
+</div>
       <p class="form-note">Sin spam. Podés darte de baja cuando quieras.</p>
     </section>
 
